@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: cdr-pipeline
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/cdr?createDatabaseIfNotExist=true&serverTimezone=UTC}
+    username: ${MYSQL_USER:cdr}
+    password: ${MYSQL_PASSWORD:cdr}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+    open-in-view: false
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/cdr}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+    consumer:
+      group-id: cdr-pipeline
+
+cdr:
+  topics:
+    events: cdr.events
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    dev.pseonkyaw.cdrpipeline: INFO
